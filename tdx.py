@@ -40,7 +40,9 @@ class TDX():
         headers = {'authorization': f'Bearer {self.get_token()}'}
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
-            return response.json()
+            j = response.json()
+            response.close()
+            return j
         else:
             return {
                 'error_code': response.status_code,
