@@ -1,10 +1,11 @@
 import time
+import os
 from tdx import TDX
 
-client_id = 'meebox-cc6ed12e-5254-47e3'
-client_secret = 'b5bfb7cc-4b43-4f4f-97f8-faaf7705df9b'
+client_id = os.getenv('TDX_ID')
+client_secret = os.getenv('TDX_SECRET')
 
-tdx = TDX(client_id, client_secret)
+tdx_client = TDX(client_id, client_secret)
 
 # url = 'https://tdx.transportdata.tw/api/basic/v2/Rail/TRA/LiveBoard/Station/1000?$filter=Direction eq 1&$format=JSON'
 base_url = "https://tdx.transportdata.tw/api"
@@ -15,7 +16,7 @@ endpoint = "/basic/v2/Rail/TRA/LiveBoard/Station/1000"
 filter = "Direction%20eq%201"  # 順逆行: [0:'順行', 1:'逆行']
 url = f"{base_url}{endpoint}?$filter={filter}&$format=JSON"
 
-stations = tdx.get_json(url)
+stations = tdx_client.get_json(url)
 # print(stations)
 for station in stations:
     print(f'{station["StationName"]["Zh_tw"]}->{station["EndingStationName"]["Zh_tw"]}')
@@ -24,6 +25,6 @@ print('3 secconds later:')
 # 3 後改以嘉義車站查詢, 測試不需重新索取 token
 endpoint = "/basic/v2/Rail/TRA/LiveBoard/Station/4080"
 url = f"{base_url}{endpoint}?$filter={filter}&$format=JSON"
-stations = tdx.get_json(url)
+stations = tdx_client.get_json(url)
 for station in stations:
     print(f'{station["StationName"]["Zh_tw"]}->{station["EndingStationName"]["Zh_tw"]}')
